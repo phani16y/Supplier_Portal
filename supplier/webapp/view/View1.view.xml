@@ -42,7 +42,7 @@
 								</f:layoutData>
 								<f:content>
 									<VBox id = "V1" class="sapUiSmallMargin" justifyContent="SpaceBetween">
-					               <core:HTML id="idHtmlUserDetails" content='&lt;div class="content"&gt;Welcome &lt;strong&gt;!!&lt;/strong&gt;&lt;font size="2"&gt;&lt;/div&gt;'></core:HTML> 
+					               <core:HTML id="idHtmlUserDetails" content='&lt;div class="content"&gt;Welcome &lt;strong&gt;{userData>/name}!!&lt;/strong&gt;&lt;font size="2"&gt;&lt;/div&gt;'></core:HTML> 
 									</VBox>
 								</f:content>
 							</f:Card>

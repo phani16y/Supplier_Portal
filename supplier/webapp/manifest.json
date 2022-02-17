@@ -18,7 +18,11 @@
                     "localUri": "localService/metadata.xml",
                     "odataVersion": "4.0"
                 }
-            }
+            },
+            "approuterUserAPI" : {
+                "uri": "/user-api/currentUser",
+                "type": "JSON"
+             }
         },
         "crossNavigation": {
             "inbounds": {
@@ -71,6 +75,10 @@
                     "bundleName": "supplier.i18n.i18n"
                 }
             },
+            "userData" : {
+                "type" : "sap.ui.model.json.JSONModel",
+                "dataSource": "approuterUserAPI"
+               },
             "": {
                 "dataSource": "mainService",
                 "preload": true,
