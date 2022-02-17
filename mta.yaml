@@ -1,0 +1,81 @@
+_schema-version: "3.2"
+ID: Supplier_Portal
+version: 0.0.1
+modules:
+- name: supplier-portal-approuter
+  type: approuter.nodejs
+  path: supplier-portal-approuter
+  requires:
+  - name: Supplier_Portal_html_repo_runtime
+  - name: uaa_Supplier_Portal
+  - name: Supplier_Portal-dest-srv
+    group: destinations
+    properties:
+      forwardAuthToken: false
+      name: ui5
+      url: https://ui5.sap.com
+  parameters:
+    disk-quota: 256M
+    memory: 256M
+- name: Supplier_Portal_ui_deployer
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: Supplier_Portal_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - supplier.zip
+      name: supplier
+      target-path: resources/
+- name: supplier
+  type: html5
+  path: supplier
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: Supplier_Portal_html_repo_runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
+- name: uaa_Supplier_Portal
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: Supplier_Portal-xsuaa-service
+    service-plan: application
+- name: Supplier_Portal_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-host
+- name: Supplier_Portal-dest-srv
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: false
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: Supplier_Portal-dest-srv
+    service-plan: lite
+parameters:
+  deploy_mode: html5-repo
